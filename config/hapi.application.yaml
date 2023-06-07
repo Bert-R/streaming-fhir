@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: 'jdbc:postgresql://postgres:5432/hapi'
+    username: admin
+    password: admin
+    driverClassName: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate.dialect: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgres94Dialect
+      hibernate.search.enabled: false
+hapi:
+  fhir:
+    custom-bean-packages: io.github.bertr.streamingfhir.hapi.interceptor
+    custom-interceptor-classes: io.github.bertr.streamingfhir.hapi.interceptor.ResourceChangePublishingInterceptor
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,prometheus,configprops"

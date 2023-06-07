@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+group = 'io.github.bertr.streamingfhir'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+targetCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.kafka:connect-api:3.3.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+task copyJar(type: Copy) {
+    from jar
+    into '../extra-classes/debezium'
+}
+
+build.dependsOn copyJar

@@ -1,0 +1,22 @@
+#! /bin/bash
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+function waitTillGetWorks() {
+    echo -e
+    echo Waiting for $1 to become available
+    while ! curl -s --retry-connrefused --retry-delay 3 --retry 20 $1 > /dev/null
+    do
+        sleep 3
+    done
+}
+
+./gradlew build
+mkdir -p -m 777 data/debezium data/postgres data/kafka
+docker run -i --rm -v $(pwd)/data/kafka:/tmp/kraft-combined-logs --user=0:0 quay.io/strimzi/kafka:latest-kafka-3.4.0-amd64 /bin/sh -c 'bin/kafka-storage.sh format --ignore-formatted -t `bin/kafka-storage.sh random-uuid` -c config/kraft/server.properties'
+docker-compose up -d
+
+waitTillGetWorks localhost:8083/connectors/ # Debezium
+${SCRIPT_DIR}/register-debezium-connector
+
+waitTillGetWorks http://localhost:8080/fhir/Patient/ # HAPI

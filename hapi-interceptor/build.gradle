@@ -1,0 +1,37 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.5' apply false
+	id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'io.github.bertr.streamingfhir'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+dependencyManagement {
+	imports {
+		mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'javax.persistence:javax.persistence-api:2.2'
+	implementation 'ca.uhn.hapi.fhir:hapi-fhir-base:6.4.0'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+task copyJar(type: Copy) {
+    from jar
+    into '../extra-classes/hapi'
+}
+
+build.dependsOn copyJar

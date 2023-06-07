@@ -1,0 +1,109 @@
+version: '3.7'
+
+services:
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    command: -c 'config_file=/etc/postgresql/postgresql.conf'
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      POSTGRES_DB: hapi
+    # not needed for networking between containers but here for troubleshooting
+    ports:
+      - "5432:5432"
+    configs:
+      - source: postgresql
+        target: /etc/postgresql/postgresql.conf
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+
+  adminer:
+    container_name: adminer
+    image: adminer:4.8.1-standalone
+    restart: always
+    ports:
+      - "${ADMINER_PORT:-8081}:8080"
+    depends_on:
+      - "postgres"
+    links:
+      - "postgres"
+
+  hapi:
+    container_name: hapi
+    image: hapiproject/hapi:v6.4.0
+    entrypoint: ["java", "--class-path", "/app/main.war", "-Dloader.path=main.war!/WEB-INF/classes/,main.war!/WEB-INF/,/app/extra-classes", "org.springframework.boot.loader.PropertiesLauncher"]
+    ports:
+      - "8080:8080"
+    configs:
+      - source: hapi
+        target: /app/config/application.yaml
+      - source: hapi-extra-classes
+        target: /app/extra-classes
+    depends_on:
+      - postgres
+
+  kafka:
+    container_name: kafka
+    image: quay.io/strimzi/kafka:latest-kafka-3.4.0-amd64
+    command:
+      [
+        "sh",
+        "-c",
+        "bin/kafka-server-start.sh config/kraft/server.properties --override advertised.listeners=$${KAFKA_ADVERTISED_LISTENERS} --override listener.security.protocol.map=$${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP} --override listeners=$${KAFKA_LISTENERS}",
+      ]
+    ports:
+      - "9092:9092"
+    user: 0:0
+    environment:
+      LOG_DIR: "/tmp/logs" # Error/info logs
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://:29092,PLAINTEXT_HOST://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+    volumes:
+      - ./data/kafka:/tmp/kraft-combined-logs # Must be initialized through setup script
+
+  kafdrop:
+    container_name: kafdrop
+    image: obsidiandynamics/kafdrop:4.0.0-SNAPSHOT
+    restart: "no"
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: "kafka:29092"
+      JVM_OPTS: "-Xms16M -Xmx48M -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
+    depends_on:
+      - "kafka"
+
+  debezium:
+    container_name: debezium
+    image: quay.io/debezium/connect:2.1.1.Final
+    restart: "no"
+    ports:
+      - "8083:8083"
+    environment:
+      GROUP_ID: 1
+      BOOTSTRAP_SERVERS: kafka:29092
+      CONFIG_STORAGE_TOPIC: my_connect_configs
+      OFFSET_STORAGE_TOPIC: my_connect_offsets
+      STATUS_STORAGE_TOPIC: my_connect_statuses
+    links:
+      - "kafka"
+      - "postgres"
+    configs:
+      - source: debezium-custom-smt
+        target: /kafka/connect/debezium-custom-smt
+    volumes:
+      - ./data/debezium:/kafka/config
+
+configs:
+  postgresql:
+     file: ./config/postgresql.conf
+  hapi:
+     file: ./config/hapi.application.yaml
+  hapi-extra-classes:
+     file: ./extra-classes/hapi
+  debezium-custom-smt:
+     file: ./extra-classes/debezium

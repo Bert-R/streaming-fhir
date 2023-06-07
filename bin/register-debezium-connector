@@ -1,0 +1,25 @@
+curl -X 'POST' \
+  'localhost:8083/connectors/' \
+  -H 'Accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "hapi-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "admin",
+    "database.password": "admin",
+    "database.dbname" : "hapi",
+    "plugin.name": "pgoutput",
+    "topic.prefix": "hapi",
+    "table.include.list": "public.hfj_tag_def",
+    "publication.autocreate.mode": "filtered",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable":"false",
+    "value.converter.schemas.enable": "false",
+    "transforms" : "hapi-message",
+    "transforms.hapi-message.type" : "io.github.bertr.streamingfhir.dbz.HapiMessageTransformation"
+  }
+}'

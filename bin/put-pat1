@@ -1,0 +1,35 @@
+curl -X 'PUT' \
+  'http://localhost:8080/fhir/Patient/1' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json+fhir' \
+  -d '{
+  "resourceType": "Patient",
+  "id": "1",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      \n      <p>Patient Donald DUCK @ Acme Healthcare, Inc. MR = 654321</p>\n    \n    </div>"
+  },
+  "identifier": [
+    {
+      "use": "usual",
+      "system": "urn:oid:2.16.840.1.113883.2.4.6.3",
+      "value": "738472983"
+    },
+    {
+      "use": "usual",
+      "system": "https://iam.philips-healthsuite.com/user",
+      "value": "6ba7e0df-7747-40f5-8b8b-100a53882bf7"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "family": "Duck",
+      "given": [
+        "Donald"
+      ]
+    }
+  ],
+  "gender": "male"
+}'
