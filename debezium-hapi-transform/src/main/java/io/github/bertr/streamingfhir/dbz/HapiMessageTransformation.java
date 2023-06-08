@@ -19,7 +19,7 @@ public class HapiMessageTransformation<R extends ConnectRecord<R>> implements Tr
     public static final String MESSAGE_ID_FIELD_NAME = "messageId";
     public static final String RESOURCE_TYPE_FIELD_NAME = "resourceType";
     public static final String RESOURCE_ID_FIELD_NAME = "resourceId";
-    private static final Schema KEY_SCHEMA = SchemaBuilder.struct().name("io.github.bertr.streamingfhir..FhirResourceKey")
+    private static final Schema KEY_SCHEMA = SchemaBuilder.struct().name("io.github.bertr.streamingfhir.FhirResourceKey")
             .field(MESSAGE_ID_FIELD_NAME, Schema.STRING_SCHEMA)
             .field(RESOURCE_TYPE_FIELD_NAME, Schema.STRING_SCHEMA)
             .field(RESOURCE_ID_FIELD_NAME, Schema.STRING_SCHEMA)

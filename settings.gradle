@@ -1,3 +1,4 @@
 rootProject.name = 'streaming-fhir'
 include 'hapi-interceptor'
 include 'debezium-hapi-transform'
+include 'int-test'
