@@ -1,13 +1,16 @@
+ID="${1:-1}"
+FAMILY_NAME="${2:-Trump}"
 curl -X 'PUT' \
-  'http://localhost:8080/fhir/Patient/1' \
+  "http://localhost:8080/fhir/Patient/${ID}" \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json+fhir' \
-  -d '{
+  --data-binary @- <<EOT
+{
   "resourceType": "Patient",
-  "id": "1",
+  "id": "${ID}",
   "text": {
     "status": "generated",
-    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      \n      <p>Patient Donald DUCK @ Acme Healthcare, Inc. MR = 654321</p>\n    \n    </div>"
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      \n      <p>Patient Donald ${FAMILY_NAME} @ Acme Healthcare, Inc. MR = 654321</p>\n    \n    </div>"
   },
   "identifier": [
     {
@@ -25,11 +28,12 @@ curl -X 'PUT' \
   "name": [
     {
       "use": "official",
-      "family": "Duck",
+      "family": "${FAMILY_NAME}",
       "given": [
         "Donald"
       ]
     }
   ],
   "gender": "male"
-}'
+}
+EOT

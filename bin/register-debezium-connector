@@ -1,8 +1,10 @@
-curl -X 'POST' \
+while curl -X 'POST' \
   'localhost:8083/connectors/' \
   -H 'Accept: application/json' \
   -H 'Content-Type: application/json' \
-  -d '{
+  --no-progress-meter \
+  --data-binary @- <<EOT | tee /dev/stderr | grep "status.*404"
+{
   "name": "hapi-connector",
   "config": {
     "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
@@ -22,4 +24,9 @@ curl -X 'POST' \
     "transforms" : "hapi-message",
     "transforms.hapi-message.type" : "io.github.bertr.streamingfhir.dbz.HapiMessageTransformation"
   }
-}'
+}
+EOT
+do
+  echo POST failed, retrying in 5 seconds
+  sleep 5
+done

@@ -13,4 +13,4 @@ Run the script ``bin/setup`` to start everything. This enables the following int
 * [HAPI](https://hapifhir.io/), a FHIR store: http://localhost:8080/fhir/metadata
 * [Kafdrop](https://github.com/obsidiandynamics/kafdrop), a web UI for viewing Kafka topics and browsing consumer groups: http://localhost:9000/
 
-To post a new ``Patient`` resource, run ``bin/post-pat1``. To update it run ``bin/put-pat1``. This will result in messages in [the ``patient`` topic](http://localhost:9001/topic/patient/messages?partition=0&offset=0&count=100&keyFormat=DEFAULT&format=DEFAULT).
+To post a new ``Patient`` resource, run ``bin/post-pat``, optionaly specifying the family name as parameter (defaults to Duck). To update it run ``bin/put-pat``, optionaly specifying the resource ID and family name as parameter (defaults to 1 Trump). This will result in messages in [the ``patient`` topic](http://localhost:9001/topic/patient/messages?partition=0&offset=0&count=100&keyFormat=DEFAULT&format=DEFAULT). Note that HAPI skips identical updates, so subsequent calls to ``bin/put-pat`` with the same family name would not result in Kafka messages.
