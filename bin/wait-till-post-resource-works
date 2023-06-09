@@ -1,0 +1,30 @@
+echo Wait until post of FHIR resource is successful
+i=0
+until curl -X 'POST' \
+  'http://localhost:8080/fhir/Practitioner' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json+fhir' \
+  --no-progress-meter \
+  --data-binary @- <<EOT | tee /dev/stderr | grep "Adam"
+{
+  "resourceType": "Practitioner",
+  "active": true,
+  "name": [
+    {
+      "family": "Careful",
+      "given": [
+        "Adam"
+      ]
+    }
+  ]
+}
+EOT
+do
+  ((i++))
+  if [[ $i -gt 5 ]]; then
+    echo "FATAL: Post failed after retries"
+    exit 1
+  fi
+  echo POST failed, retrying in 5 seconds
+  sleep 5
+done
