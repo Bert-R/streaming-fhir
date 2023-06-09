@@ -19,7 +19,7 @@ jobs:
           java-version: 17
 
       - name: Execute Gradle build
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v2.4.2
         with:
           arguments: build
 
@@ -27,7 +27,7 @@ jobs:
         run: ./bin/setup
 
 #      - name: Run the integration tests
-#        uses: gradle/gradle-build-action@v2
+#        uses: gradle/gradle-build-action@v2.4.2
 #        with:
 #          arguments: intTest
 
