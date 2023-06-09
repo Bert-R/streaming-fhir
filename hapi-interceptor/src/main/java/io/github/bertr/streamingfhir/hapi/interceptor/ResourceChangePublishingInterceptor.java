@@ -77,7 +77,7 @@ public class ResourceChangePublishingInterceptor
 
 	private static String determineCompartment(String resourceType)
 	{
-		return "Patient"; // TODO: determine based on the resource type
+		return resourceType; // TODO: determine compartment based on the resource type
 	}
 
 	private static String buildMessageId(IIdType idElement)

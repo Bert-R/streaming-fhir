@@ -31,7 +31,7 @@ class TestPatient extends Specification
 		])
 		// subscribe to the topic
 		consumer.subscribe([topic])
-		consumer.poll(Duration.ofSeconds(10)) // Seek to end
+		consumer.poll(Duration.ofSeconds(300)) // Seek to end
 
 		when:
 		def FAMILY_NAME = UUID.randomUUID().toString()
@@ -70,7 +70,7 @@ class TestPatient extends Specification
 
 		then:
 		// loop using the poll mechanism
-		ConsumerRecords records = consumer.poll(Duration.ofSeconds(10))
+		ConsumerRecords records = consumer.poll(Duration.ofSeconds(300))
 		records.count() == 1
 		records[0].toString() ==~ /.*\\"family\\":\\"${FAMILY_NAME}\\",.*/
 

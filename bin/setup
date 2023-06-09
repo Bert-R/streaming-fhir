@@ -22,3 +22,6 @@ docker restart debezium
 waitTillGetWorks localhost:8083/connectors/ # Debezium
 
 waitTillGetWorks http://localhost:8080/fhir/Patient/ # HAPI
+
+
+${SCRIPT_DIR}/wait-till-post-resource-works
