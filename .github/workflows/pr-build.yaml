@@ -20,3 +20,6 @@ jobs:
     
     - name: Execute Gradle build
       run: ./gradlew build
+
+    - name: Start the services
+      run: ./bin/setup
