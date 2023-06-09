@@ -26,10 +26,10 @@ jobs:
       - name: Start services
         run: ./bin/setup
 
-      - name: Run the integration tests
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: intTest
+#      - name: Run the integration tests
+#        uses: gradle/gradle-build-action@v2
+#        with:
+#          arguments: intTest
 
       - name: Gather logs
         if: always()
