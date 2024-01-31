@@ -66,13 +66,12 @@ services:
 
   kafdrop:
     container_name: kafdrop
-    image: obsidiandynamics/kafdrop:3.31.0
+    image: obsidiandynamics/kafdrop:4.0.1
     restart: "no"
     ports:
       - "9000:9000"
     environment:
       KAFKA_BROKERCONNECT: "kafka:29092"
-      JVM_OPTS: "-Xms16M -Xmx48M -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
     depends_on:
       - "kafka"
 
