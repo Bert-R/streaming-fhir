@@ -30,6 +30,6 @@ dependencies {
     intTestImplementation platform("org.spockframework:spock-bom:2.3-groovy-4.0")
     intTestImplementation "org.spockframework:spock-core"
     intTestImplementation "com.google.code.gson:gson:2.10.1"
-    intTestImplementation "org.apache.kafka:kafka-clients:3.6.1"
+    intTestImplementation "org.apache.kafka:kafka-clients:3.7.0"
 
 }
