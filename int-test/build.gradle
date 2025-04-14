@@ -29,7 +29,7 @@ def intTestTask = tasks.register('intTest', Test) {
 dependencies {
     intTestImplementation platform("org.spockframework:spock-bom:2.3-groovy-4.0")
     intTestImplementation "org.spockframework:spock-core"
-    intTestImplementation "com.google.code.gson:gson:2.12.1"
+    intTestImplementation "com.google.code.gson:gson:2.13.0"
     intTestImplementation "org.apache.kafka:kafka-clients:3.9.0"
 
 }
