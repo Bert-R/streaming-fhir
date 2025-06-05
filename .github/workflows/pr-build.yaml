@@ -40,7 +40,7 @@ jobs:
           name: logs
           path: /tmp/streaming-fhir-logs
 
-      - name: Debug: search for test results
+      - name: Debug - Search for test results
         run: |
           find . -name *.xml -print
 
