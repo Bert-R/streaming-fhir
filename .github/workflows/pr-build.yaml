@@ -40,10 +40,6 @@ jobs:
           name: logs
           path: /tmp/streaming-fhir-logs
 
-      - name: Debug - Search for test results
-        run: |
-          find . -name *.xml -print
-
       - name: Publish test results
         if: always()
         uses: EnricoMi/publish-unit-test-result-action@v2.7
