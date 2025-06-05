@@ -19,18 +19,11 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Execute Gradle build
+      - name: Execute Gradle build and run integration tests
         uses: gradle/actions/setup-gradle@v4
-        with:
-          tasks: build
 
       - name: Start services
         run: ./bin/setup
-
-#      - name: Run the integration tests
-#        uses: gradle/gradle-build-action@v3.0.0
-#        with:
-#          tasks: intTest
 
       - name: Gather logs
         if: always()
