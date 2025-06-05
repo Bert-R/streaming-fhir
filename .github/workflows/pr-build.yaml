@@ -22,7 +22,7 @@ jobs:
       - name: Execute Gradle build
         uses: gradle/actions/setup-gradle@v4
         with:
-          arguments: build
+          tasks: build
 
       - name: Start services
         run: ./bin/setup
@@ -30,7 +30,7 @@ jobs:
 #      - name: Run the integration tests
 #        uses: gradle/gradle-build-action@v3.0.0
 #        with:
-#          arguments: intTest
+#          tasks: intTest
 
       - name: Gather logs
         if: always()
