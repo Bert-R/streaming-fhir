@@ -77,7 +77,7 @@ services:
 
   debezium:
     container_name: debezium
-    image: quay.io/debezium/connect:2.2.0.Final
+    image: quay.io/debezium/connect:3.3.2.Final
     restart: "no"
     ports:
       - "8083:8083"
