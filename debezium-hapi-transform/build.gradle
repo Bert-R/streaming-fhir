@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     implementation 'org.apache.kafka:connect-api:4.1.1'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.20.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.21.0'
 }
 
 tasks.named('test') {
